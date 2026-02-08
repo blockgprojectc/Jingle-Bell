@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Hub</title>
+    <title>Video Hub | Streaming</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #000; }
         @keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }
         .animate-progress { animation: progress 3s linear forwards; }
-        body { background-color: black; font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body>
+<body class="text-white">
 
     <div id="loader" class="hidden fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center">
         <div class="w-16 h-16 border-4 border-[#0088cc] border-t-transparent rounded-full animate-spin mb-6"></div>
-        <h2 class="text-white text-2xl font-bold mb-2">Verifying Connection...</h2>
-        <p class="text-neutral-400 mb-8">Please wait while we secure your link.</p>
-        <div class="w-full max-w-sm bg-neutral-800 h-2 rounded-full overflow-hidden">
+        <h2 class="text-2xl font-bold mb-2">Verifying Connection...</h2>
+        <p class="text-neutral-400 mb-8">Securing your high-speed link</p>
+        <div class="w-full max-w-sm bg-neutral-900 h-2 rounded-full overflow-hidden">
             <div class="bg-[#0088cc] h-full animate-progress"></div>
         </div>
     </div>
@@ -26,46 +27,56 @@
     <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-neutral-800 p-5">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-3">
             <i data-lucide="video" class="text-[#0088cc] w-8 h-8"></i>
-            <h1 class="text-white text-3xl font-bold">Video Hub</h1>
+            <h1 class="text-3xl font-bold">Video Hub</h1>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <div class="flex items-center justify-center gap-3 mb-8">
+            <button id="btn-all" onclick="setCategory('all')" class="flex items-center gap-2 px-6 py-2.5 rounded-xl transition-all bg-[#0088cc] text-white font-bold">
+                <span>All</span>
+            </button>
+            <button id="btn-new" onclick="setCategory('new')" class="flex items-center gap-2 px-6 py-2.5 rounded-xl transition-all bg-neutral-900 text-neutral-400 hover:text-white font-bold">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>New</span>
+            </button>
+            <button id="btn-top" onclick="setCategory('top')" class="flex items-center gap-2 px-6 py-2.5 rounded-xl transition-all bg-neutral-900 text-neutral-400 hover:text-white font-bold">
+                <i data-lucide="trending-up" class="w-4 h-4"></i>
+                <span>Top Rated</span>
+            </button>
+        </div>
+
         <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"></div>
-        <div id="pagination" class="flex justify-center items-center gap-3 mb-12"></div>
+
+        <div id="pagination" class="flex justify-center items-center gap-2 mb-12"></div>
     </main>
 
     <script>
         // ==========================================
-        // 4. YOUR VIDEO LIST (THIS IS WHERE YOU WORK!)
+        // YOUR VIDEO DATA (Edit category to "new" or "top")
         // ==========================================
-        // To add a video: Copy from { to }, and paste it.
-        // Make sure there is a comma after every } except the last one.
-        
         const videoData = [
-            { 
-                id: 1, 
-                title: "Epic Journey Movie", 
-                thumb: "https://picsum.photos/800/450?v=1", 
-                ad: "https://your-adsterra-link.com", 
-                video: "https://t.me/your-telegram-link" 
-            },
-            { 
-                id: 2, 
-                title: "Action Thriller Clip", 
-                thumb: "https://picsum.photos/800/450?v=2", 
-                ad: "https://your-adsterra-link.com", 
-                video: "https://t.me/your-telegram-link" 
-            }
+            { id: 1, category: "new", title: "Cinematic Journey 1", thumb: "https://picsum.photos/800/450?v=1", ad: "YOUR_AD_LINK", video: "YOUR_VIDEO_LINK" },
+            { id: 2, category: "top", title: "Action Adventure 2", thumb: "https://picsum.photos/800/450?v=2", ad: "YOUR_AD_LINK", video: "YOUR_VIDEO_LINK" },
+            { id: 3, category: "new", title: "Landscape 4K 3", thumb: "https://picsum.photos/800/450?v=3", ad: "YOUR_AD_LINK", video: "YOUR_VIDEO_LINK" },
+            { id: 4, category: "top", title: "Urban Night 4", thumb: "https://picsum.photos/800/450?v=4", ad: "YOUR_AD_LINK", video: "YOUR_VIDEO_LINK" },
+            { id: 5, category: "new", title: "Extreme Outdoors 5", thumb: "https://picsum.photos/800/450?v=5", ad: "YOUR_AD_LINK", video: "YOUR_VIDEO_LINK" },
+            { id: 6, category: "top", title: "Future Tech 6", thumb: "https://picsum.photos/800/450?v=6", ad: "YOUR_AD_LINK", video: "YOUR_VIDEO_LINK" },
+            { id: 7, category: "new", title: "Documentary 7", thumb: "https://picsum.photos/800/450?v=7", ad: "YOUR_AD_LINK", video: "YOUR_VIDEO_LINK" }
         ];
 
-        // ==========================================
-        // 5. THE ENGINE (DO NOT TOUCH THIS CODE)
-        // ==========================================
-        const itemsPerPage = 6;
         let currentPage = 1;
+        let activeCategory = 'all';
+        const itemsPerPage = 6;
 
-        function showVideo(adLink, videoUrl) {
+        function setCategory(cat) {
+            activeCategory = cat;
+            currentPage = 1;
+            render();
+        }
+
+        function playVideo(adLink, videoUrl) {
             document.getElementById('loader').classList.remove('hidden');
             window.open(adLink, '_blank');
             setTimeout(() => { window.location.href = videoUrl; }, 3000);
@@ -74,35 +85,51 @@
         function render() {
             const grid = document.getElementById('video-grid');
             const pagin = document.getElementById('pagination');
-            grid.innerHTML = ""; pagin.innerHTML = "";
+            
+            // 1. Filter Data
+            const filtered = activeCategory === 'all' 
+                ? videoData 
+                : videoData.filter(v => v.category === activeCategory);
 
-            const totalPages = Math.ceil(videoData.length / itemsPerPage);
-            const start = (currentPage - 1) * itemsPerPage;
-            const currentVideos = videoData.slice(start, start + itemsPerPage);
+            // 2. Paginate Data
+            const totalPages = Math.ceil(filtered.length / itemsPerPage);
+            const currentVideos = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-            currentVideos.forEach(v => {
-                grid.innerHTML += `
-                    <div onclick="showVideo('${v.ad}', '${v.video}')" class="group cursor-pointer bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800 hover:border-[#0088cc] transition-all">
-                        <div class="relative aspect-video">
-                            <img src="${v.thumb}" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div class="bg-[#0088cc] p-4 rounded-full shadow-lg"><i data-lucide="play" class="text-white"></i></div>
-                            </div>
+            // 3. Render Videos
+            grid.innerHTML = currentVideos.map(v => `
+                <div onclick="playVideo('${v.ad}', '${v.video}')" class="group cursor-pointer bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800 hover:border-[#0088cc] transition-all">
+                    <div class="relative aspect-video">
+                        <img src="${v.thumb}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="bg-[#0088cc] p-4 rounded-full shadow-xl"><i data-lucide="play" class="text-white fill-current"></i></div>
                         </div>
-                        <div class="p-4 text-white">
-                            <h3 class="font-medium line-clamp-1">${v.title}</h3>
-                            <button class="mt-4 w-full py-2 bg-neutral-800 group-hover:bg-[#0088cc] rounded-lg font-bold text-sm transition-colors">WATCH NOW</button>
-                        </div>
-                    </div>`;
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium text-white line-clamp-1">${v.title}</h3>
+                        <button class="mt-4 w-full py-2 bg-neutral-800 group-hover:bg-[#0088cc] group-hover:text-white text-neutral-400 rounded-lg font-bold text-sm transition-all">WATCH NOW</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // 4. Render Pagination
+            pagin.innerHTML = Array.from({length: totalPages}, (_, i) => i + 1).map(num => `
+                <button onclick="currentPage=${num}; render(); window.scrollTo(0,0);" class="w-10 h-10 rounded-lg font-bold transition-all ${currentPage === num ? 'bg-[#0088cc] text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}">
+                    ${num}
+                </button>
+            `).join('');
+
+            // 5. Update Button UI
+            ['all', 'new', 'top'].forEach(cat => {
+                const btn = document.getElementById(`btn-${cat}`);
+                if (cat === activeCategory) {
+                    btn.classList.add('bg-[#0088cc]', 'text-white');
+                    btn.classList.remove('bg-neutral-900', 'text-neutral-400');
+                } else {
+                    btn.classList.remove('bg-[#0088cc]', 'text-white');
+                    btn.classList.add('bg-neutral-900', 'text-neutral-400');
+                }
             });
 
-            for (let i = 1; i <= totalPages; i++) {
-                const btn = document.createElement('button');
-                btn.innerText = i;
-                btn.className = `w-10 h-10 rounded-lg text-white font-bold transition-all ${currentPage === i ? 'bg-[#0088cc]' : 'bg-neutral-800 hover:bg-neutral-700'}`;
-                btn.onclick = () => { currentPage = i; render(); window.scrollTo({top: 0, behavior: 'smooth'}); };
-                pagin.appendChild(btn);
-            }
             lucide.createIcons();
         }
 
