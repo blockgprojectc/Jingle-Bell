@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,34 +9,66 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #000; overflow-x: hidden; }
-        
-        @keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }
-        .animate-progress { animation: progress 3s linear forwards; }
-        
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #000;
+            overflow-x: hidden;
+        }
+
+        @keyframes progress {
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        .animate-progress {
+            animation: progress 3s linear forwards;
+        }
+
         .btn-theory {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .btn-theory:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0, 136, 204, 0.5);
         }
+
         .bell-shake:hover i {
             animation: shake 0.5s ease-in-out infinite;
         }
+
         @keyframes shake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(15deg); }
-            75% { transform: rotate(-15deg); }
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(15deg);
+            }
+
+            75% {
+                transform: rotate(-15deg);
+            }
         }
     </style>
 </head>
+
 <body class="text-white">
 
-    <div id="loader" class="hidden fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center p-6 text-center">
+    <div id="loader"
+        class="hidden fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center p-6 text-center">
         <div class="relative mb-8">
             <div class="w-24 h-24 border-b-4 border-[#0088cc] rounded-full animate-spin"></div>
-            <i data-lucide="bell" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#0088cc] w-10 h-10"></i>
+            <i data-lucide="bell"
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#0088cc] w-10 h-10"></i>
         </div>
         <h2 class="text-3xl font-extrabold mb-2 tracking-tight">Ringing the Link...</h2>
         <p class="text-neutral-400 max-w-sm mb-10">Jingle Bell is securing your high-speed connection. Please wait.</p>
@@ -50,23 +83,30 @@
                 <div class="bg-[#0088cc] p-2 rounded-xl">
                     <i data-lucide="bell" class="text-white w-7 h-7"></i>
                 </div>
-                <h1 class="text-2xl font-extrabold tracking-tighter uppercase italic text-[#0088cc]">Jingle <span class="text-white">Bell</span></h1>
+                <h1 class="text-2xl font-extrabold tracking-tighter uppercase italic text-[#0088cc]">Jingle <span
+                        class="text-white">Bell</span></h1>
             </div>
-            
+
             <div class="relative w-full sm:w-80">
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 w-4 h-4"></i>
-                <input type="text" id="searchInput" oninput="render()" placeholder="Search movies & clips..." 
+                <input type="text" id="searchInput" oninput="render()" placeholder="Search movies & clips..."
                     class="w-full bg-neutral-900 border border-neutral-800 rounded-2xl py-3 pl-12 pr-4 text-sm focus:border-[#0088cc] focus:ring-1 focus:ring-[#0088cc] outline-none transition-all">
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-10">
-        
+
         <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
-            <button id="btn-all" onclick="setCategory('all')" class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-[#0088cc] text-white">ALL CONTENT</button>
-            <button id="btn-new" onclick="setCategory('new')" class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-neutral-900 text-neutral-400 hover:text-white">NEW ARRIVALS</button>
-            <button id="btn-top" onclick="setCategory('top')" class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-neutral-900 text-neutral-400 hover:text-white">TOP RATED</button>
+            <button id="btn-all" onclick="setCategory('all')"
+                class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-[#0088cc] text-white">ALL
+                CONTENT</button>
+            <button id="btn-new" onclick="setCategory('new')"
+                class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-neutral-900 text-neutral-400 hover:text-white">NEW
+                ARRIVALS</button>
+            <button id="btn-top" onclick="setCategory('top')"
+                class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-neutral-900 text-neutral-400 hover:text-white">TOP
+                RATED</button>
         </div>
 
         <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"></div>
@@ -78,46 +118,41 @@
         // ==========================================
         // CONFIGURATION
         // ==========================================
-        const MAIN_AD_LINK = "https://your-adsterra-link.com"; 
-        
-        const videoData = [
-            { id: 1, category: "new", title: "Action Blockbuster", thumb: "https://picsum.photos/800/450?v=11", ad: "AD_LINK", video: "VIDEO_LINK" },
-            { id: 2, category: "top", title: "Drama Highlight", thumb: "https://picsum.photos/800/450?v=22", ad: "AD_LINK", video: "VIDEO_LINK" },
-            { id: 3, category: "new", title: "Thriller Series", thumb: "https://picsum.photos/800/450?v=33", ad: "AD_LINK", video: "VIDEO_LINK" },
-            { id: 4, category: "top", title: "Comedy Night", thumb: "https://picsum.photos/800/450?v=44", ad: "AD_LINK", video: "VIDEO_LINK" },
-            { id: 5, category: "new", title: "Horror Special", thumb: "https://picsum.photos/800/450?v=55", ad: "AD_LINK", video: "VIDEO_LINK" },
-            { id: 6, category: "top", title: "Sci-Fi Epic", thumb: "https://picsum.photos/800/450?v=66", ad: "AD_LINK", video: "VIDEO_LINK" },
-        ];
 
+        const MAIN_AD_LINK = "https://www.effectivegatecpm.com/sgk1tgjk7t?key=953a6ee48286b155821c80a7c50d853b";
+
+        let videoData = [];
         let currentPage = 1;
         let activeCategory = 'all';
-        const itemsPerPage = 6; 
+        const itemsPerPage = 6;
+
+        // Fetch Data from JSON
+        fetch('videos.json')
+            .then(response => response.json())
+            .then(data => {
+                videoData = data;
+                render();
+            })
+            .catch(error => console.error('Error loading videos:', error));
 
         // ==========================================
         // ACTION THEORY ENGINE
         // ==========================================
         function runTheoryAction(callback) {
             document.getElementById('loader').classList.remove('hidden');
-            window.open(MAIN_AD_LINK, '_blank');
-            
+            window.open(MAIN_AD_LINK, '_blank'); // Uncomment when ready
+
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
                 callback();
-                window.scrollTo({top: 0, behavior: 'smooth'});
-            }, 3000);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 3000); // Reduced delay for better UX
         }
 
         function setCategory(cat) {
             runTheoryAction(() => {
                 activeCategory = cat;
                 currentPage = 1; // Back to first page logic
-                render();
-            });
-        }
-
-        function setPage(num) {
-            runTheoryAction(() => {
-                currentPage = num;
                 render();
             });
         }
@@ -137,7 +172,7 @@
             const grid = document.getElementById('video-grid');
             const pagin = document.getElementById('pagination');
             const query = document.getElementById('searchInput').value.toLowerCase();
-            
+
             const filtered = videoData.filter(v => {
                 const matchesCat = activeCategory === 'all' || v.category === activeCategory;
                 const matchesSearch = v.title.toLowerCase().includes(query);
@@ -164,7 +199,7 @@
                 </div>
             `).join('');
 
-            pagin.innerHTML = totalPages <= 1 ? "" : Array.from({length: totalPages}, (_, i) => i + 1).map(num => `
+            pagin.innerHTML = totalPages <= 1 ? "" : Array.from({ length: totalPages }, (_, i) => i + 1).map(num => `
                 <button onclick="setPage(${num})" 
                     class="btn-theory w-14 h-14 rounded-2xl font-bold text-sm ${currentPage === num ? 'bg-[#0088cc] text-white shadow-lg shadow-[#0088cc]/40' : 'bg-neutral-900 text-neutral-500 hover:bg-neutral-800'}">
                     ${num}
@@ -186,4 +221,5 @@
         render();
     </script>
 </body>
+
 </html>
