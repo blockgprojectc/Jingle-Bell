@@ -35,12 +35,6 @@
                 <h1 class="text-2xl font-extrabold tracking-tighter uppercase italic text-[#FACC15]">Jingle <span
                         class="text-white">Bell</span></h1>
             </div>
-
-            <div class="relative w-full sm:w-80">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 w-4 h-4"></i>
-                <input type="text" id="searchInput" oninput="render()" placeholder="Search movies & clips..."
-                    class="w-full bg-neutral-900 border border-neutral-800 rounded-2xl py-3 pl-12 pr-4 text-sm focus:border-[#FACC15] focus:ring-1 focus:ring-[#FACC15] outline-none transition-all">
-            </div>
         </div>
     </header>
 
@@ -53,9 +47,6 @@
             <button id="btn-new" onclick="setCategory('new')"
                 class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-neutral-900 text-neutral-400 hover:text-black hover:bg-[#FACC15]">NEW
                 ARRIVALS</button>
-            <button id="btn-top" onclick="setCategory('top')"
-                class="btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-neutral-900 text-neutral-400 hover:text-black hover:bg-[#FACC15]">TOP
-                RATED</button>
         </div>
 
         <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"></div>

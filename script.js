@@ -61,12 +61,10 @@ function playVideo(adLink, videoUrl) {
 function render() {
     const grid = document.getElementById('video-grid');
     const pagin = document.getElementById('pagination');
-    const query = document.getElementById('searchInput').value.toLowerCase();
 
     const filtered = videoData.filter(v => {
         const matchesCat = activeCategory === 'all' || v.category === activeCategory;
-        const matchesSearch = v.title.toLowerCase().includes(query);
-        return matchesCat && matchesSearch;
+        return matchesCat;
     });
 
     const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -108,7 +106,7 @@ function render() {
         </button>
     `).join('');
 
-    ['all', 'new', 'top'].forEach(cat => {
+    ['all', 'new'].forEach(cat => {
         const btn = document.getElementById(`btn-${cat}`);
         if (cat === activeCategory) {
             btn.className = "btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-[#FACC15] text-black shadow-lg shadow-[#FACC15]/40";
