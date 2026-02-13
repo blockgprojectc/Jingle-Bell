@@ -55,8 +55,17 @@ function render() {
     const pagin = document.getElementById('pagination');
 
     const filtered = videoData.filter(v => {
-        const matchesCat = activeCategory === 'all' || v.category === activeCategory;
-        return matchesCat;
+        if (activeCategory === 'all') return true;
+        if (activeCategory === 'new') {
+            if (!v.upload_date) return false;
+            const uploadTime = new Date(v.upload_date).getTime();
+            const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+            return uploadTime > sevenDaysAgo;
+        }
+        if (activeCategory === 'long') {
+            return v.duration && v.duration > 900;
+        }
+        return v.category === activeCategory;
     });
 
     const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -98,7 +107,7 @@ function render() {
         </button>
     `).join('');
 
-    ['all', 'new'].forEach(cat => {
+    ['all', 'new', 'long'].forEach(cat => {
         const btn = document.getElementById(`btn-${cat}`);
         if (cat === activeCategory) {
             btn.className = "btn-theory px-10 py-3.5 rounded-2xl font-bold text-sm bg-[#FACC15] text-black shadow-lg shadow-[#FACC15]/40";
