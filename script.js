@@ -22,14 +22,9 @@ fetch('videos.json')
 // ACTION THEORY ENGINE
 // ==========================================
 function runTheoryAction(callback) {
-    document.getElementById('loader').classList.remove('hidden');
     window.open(MAIN_AD_LINK, '_blank');
-
-    setTimeout(() => {
-        document.getElementById('loader').classList.add('hidden');
-        callback();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 3000);
+    callback();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function setCategory(cat) {
@@ -48,11 +43,8 @@ function setPage(num) {
 }
 
 function playVideo(adLink, videoUrl) {
-    document.getElementById('loader').classList.remove('hidden');
     window.open(adLink, '_blank');
-    setTimeout(() => {
-        window.location.href = videoUrl;
-    }, 3000);
+    window.location.href = videoUrl;
 }
 
 // ==========================================
