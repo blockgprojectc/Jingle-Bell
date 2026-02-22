@@ -21,8 +21,14 @@ fetch('videos.json')
 // ==========================================
 // ACTION THEORY ENGINE
 // ==========================================
+let adClickCount = 0;
+
 function runTheoryAction(callback) {
-    window.open(MAIN_AD_LINK, '_blank');
+    adClickCount++;
+    // Redirect only on every second click (2, 4, 6...)
+    if (adClickCount % 2 === 0) {
+        window.open(MAIN_AD_LINK, '_blank');
+    }
     callback();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
